@@ -1,0 +1,515 @@
+{
+  "restaurant": "八曜和茶｜菜單示範",
+  "theme": "茶飲對話點餐",
+  "source_note": "依使用者提供的菜單圖片整理，價格及品名為課堂示範；實際營業請再次核對。",
+  "items": [
+    {
+      "id": "drink_01",
+      "category": "和風茶",
+      "name": "八曜和茶",
+      "price": 35,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_02",
+      "category": "和風茶",
+      "name": "和風308",
+      "price": 50,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_03",
+      "category": "和風茶",
+      "name": "83蜂凝露",
+      "price": 55,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_04",
+      "category": "和風日式複方茶",
+      "name": "和風307",
+      "price": 50,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_05",
+      "category": "和風日式複方茶",
+      "name": "究極308",
+      "price": 42,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_06",
+      "category": "和風日式複方茶",
+      "name": "朝日覺醒紅茶",
+      "price": 40,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_07",
+      "category": "和風日式複方茶",
+      "name": "83蜂見茶",
+      "price": 60,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_08",
+      "category": "自然茶",
+      "name": "極上307",
+      "price": 37,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_09",
+      "category": "自然茶",
+      "name": "舞伎406紅茶",
+      "price": 46,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_10",
+      "category": "自然茶",
+      "name": "大地覺醒紅茶",
+      "price": 35,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_11",
+      "category": "自然茶",
+      "name": "明日清爽茶",
+      "price": 35,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_12",
+      "category": "自然茶",
+      "name": "焙煎黑烏龍",
+      "price": 35,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_13",
+      "category": "自然茶",
+      "name": "茉妃505",
+      "price": 40,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_14",
+      "category": "纖果爽",
+      "name": "柚香覺醒307",
+      "price": 67,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_15",
+      "category": "纖果爽",
+      "name": "柚香覺醒紅茶",
+      "price": 65,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_16",
+      "category": "纖果爽",
+      "name": "八曜雙C纖檸露",
+      "price": 50,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_17",
+      "category": "纖果爽",
+      "name": "寧夏307",
+      "price": 60,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_18",
+      "category": "纖果爽",
+      "name": "明日清爽檸檬茶",
+      "price": 55,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_19",
+      "category": "纖果爽",
+      "name": "京楓檸檬紅茶",
+      "price": 50,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_20",
+      "category": "纖果爽",
+      "name": "八曜黑檸檬茶",
+      "price": 55,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_21",
+      "category": "纖果爽",
+      "name": "83蜂檸爽",
+      "price": 65,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_22",
+      "category": "厚奶茶",
+      "name": "覺醒奶茶",
+      "price": 55,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_23",
+      "category": "厚奶茶",
+      "name": "匠心奶茶",
+      "price": 60,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_24",
+      "category": "厚奶茶",
+      "name": "深煎黑龍奶茶",
+      "price": 55,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_25",
+      "category": "厚奶茶",
+      "name": "京彩舞伎奶茶",
+      "price": 66,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_26",
+      "category": "厚奶茶",
+      "name": "冬戀奶茶",
+      "price": 66,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_27",
+      "category": "厚奶茶",
+      "name": "308炭燒濃乳",
+      "price": 66,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_28",
+      "category": "厚奶茶",
+      "name": "83蜂潮奶茶",
+      "price": 69,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_29",
+      "category": "厚奶茶",
+      "name": "雪匠奶茶",
+      "price": 69,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_30",
+      "category": "厚奶茶",
+      "name": "茉妃雪奶",
+      "price": 60,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_31",
+      "category": "鮮乳定製",
+      "name": "八曜和風 茶拿鐵",
+      "price": 55,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_32",
+      "category": "鮮乳定製",
+      "name": "八曜和風 鮮乳茶",
+      "price": 65,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_33",
+      "category": "鮮乳定製",
+      "name": "牧場覺醒 茶拿鐵",
+      "price": 55,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_34",
+      "category": "鮮乳定製",
+      "name": "牧場覺醒 鮮乳茶",
+      "price": 65,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_35",
+      "category": "鮮乳定製",
+      "name": "牧場黑烏龍 茶拿鐵",
+      "price": 60,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_36",
+      "category": "鮮乳定製",
+      "name": "牧場黑烏龍 鮮乳茶",
+      "price": 70,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_37",
+      "category": "鮮乳定製",
+      "name": "牧場307 茶拿鐵",
+      "price": 65,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_38",
+      "category": "鮮乳定製",
+      "name": "牧場307 鮮乳茶",
+      "price": 75,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_39",
+      "category": "鮮乳定製",
+      "name": "牧場308 茶拿鐵",
+      "price": 65,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_40",
+      "category": "鮮乳定製",
+      "name": "牧場308 鮮乳茶",
+      "price": 75,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_41",
+      "category": "鮮乳定製",
+      "name": "寶澤香焙歐蕾 茶拿鐵",
+      "price": 66,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_42",
+      "category": "鮮乳定製",
+      "name": "寶澤香焙歐蕾 鮮乳茶",
+      "price": 76,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_43",
+      "category": "鮮乳定製",
+      "name": "茉妃牧場505 茶拿鐵",
+      "price": 65,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_44",
+      "category": "鮮乳定製",
+      "name": "茉妃牧場505 鮮乳茶",
+      "price": 75,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_45",
+      "category": "極韻白奶茶",
+      "name": "8YO極韻白奶茶",
+      "price": 79,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_46",
+      "category": "極韻白奶茶",
+      "name": "308極韻白奶茶",
+      "price": 79,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_47",
+      "category": "極韻白奶茶",
+      "name": "307極韻白奶茶",
+      "price": 89,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_48",
+      "category": "極韻白奶茶",
+      "name": "406極韻白奶茶",
+      "price": 89,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_49",
+      "category": "極韻白奶茶",
+      "name": "茉心極韻白奶茶",
+      "price": 89,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_50",
+      "category": "乳酸樂多",
+      "name": "樂多307",
+      "price": 70,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_51",
+      "category": "乳酸樂多",
+      "name": "樂多308",
+      "price": 70,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_52",
+      "category": "乳酸樂多",
+      "name": "八曜樂多",
+      "price": 60,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_53",
+      "category": "乳酸樂多",
+      "name": "明日樂多",
+      "price": 60,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_54",
+      "category": "乳酸樂多",
+      "name": "茉語樂多",
+      "price": 70,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": []
+    },
+    {
+      "id": "drink_55",
+      "category": "益生菌",
+      "name": "激酵益生菌乳茶",
+      "price": 79,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    },
+    {
+      "id": "drink_56",
+      "category": "益生菌",
+      "name": "順酵柚香菌乳茶",
+      "price": 79,
+      "description": "依參考菜單示範；成分與供應請向店員確認",
+      "allergens": [
+        "奶"
+      ]
+    }
+  ]
+}
