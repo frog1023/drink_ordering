@@ -3,6 +3,7 @@ import json
 import os
 import secrets
 import sqlite3
+import logging
 from pathlib import Path
 from urllib.parse import quote
 
@@ -69,6 +70,7 @@ def chat(request: Chat):
         result = OpenAI(api_key=key, timeout=20).responses.create(model=os.getenv("OPENAI_MODEL", "gpt-4.1-mini"), instructions=instruction, input=prior + [{"role":"user","content":request.message}], max_output_tokens=350, store=False)
         return {"reply":result.output_text}
     except Exception:
+        logging.exception("AI chat request failed")
         raise HTTPException(502, "AI 暫時無法回應，請找店員協助")
 
 @app.post("/api/orders", status_code=201)
