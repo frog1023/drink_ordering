@@ -65,7 +65,7 @@ def chat(request: Chat):
     if not key:
         raise HTTPException(503, "請先在 .env 設定 OPENAI_API_KEY")
     prior = [{"role": t["role"], "content": t["content"][:1000]} for t in request.history[-8:] if t.get("role") in ("user", "assistant") and isinstance(t.get("content"), str)]
-    instruction = ("你是繁體中文飲料店點餐助手。只依以下菜單推薦，不能虛構菜色、價格、過敏安全或已送單。未知過敏資訊請找店員確認。顧客要下單時請他操作購物車。菜單：" + json.dumps(MENU, ensure_ascii=False))
+    instruction = ("你是繁體中文飲料店點餐助手。只依以下菜單推薦，不能虛構菜色、價格、過敏安全或已送單。未知過敏資訊請找店員確認。你無法操作購物車；推薦後請顧客點選畫面上的飲料選項，不要詢問是否由你代為加入。顧客要下單時請他操作購物車。菜單：" + json.dumps(MENU, ensure_ascii=False))
     try:
         result = OpenAI(api_key=key, timeout=20).responses.create(model=os.getenv("OPENAI_MODEL", "gpt-4.1-mini"), instructions=instruction, input=prior + [{"role":"user","content":request.message}], max_output_tokens=350, store=False)
         return {"reply":result.output_text}
