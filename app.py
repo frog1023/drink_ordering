@@ -115,7 +115,7 @@ def status(number: int, request: Status, x_admin_token: str | None = Header(defa
 def qr(table: str = "A1"):
     if len(table)>20:
         raise HTTPException(422, "桌號太長")
-    url = os.getenv("PUBLIC_BASE_URL","http://127.0.0.1:8000").rstrip("/") + "/?table=" + quote(table)
+    url = os.getenv("PUBLIC_BASE_URL","http://127.0.0.1:8000").rstrip("/") + "/"
     output=io.BytesIO()
     qrcode.make(url).save(output,format="PNG")
     output.seek(0)
