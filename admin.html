@@ -1,3 +1,50 @@
-<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>店員訂單</title><style>body{font:16px system-ui;max-width:800px;margin:auto;padding:20px}article{border:1px solid #aaa;padding:14px;margin:12px 0;border-radius:8px}button,input,select{padding:8px}</style><h1>店員訂單</h1><p>輸入 .env 中的 ADMIN_TOKEN：</p><input id="token" type="password"><button onclick="load()">載入訂單</button><p id="msg"></p><div id="list"></div><script>
-const e=id=>document.getElementById(id),safe=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));async function load(){let r=await fetch('/api/admin/orders',{headers:{'X-Admin-Token':e('token').value}});if(!r.ok){e('msg').textContent='載入失敗：請檢查權杖';return}let data=await r.json();e('msg').textContent='載入 '+data.length+' 筆';e('list').innerHTML=data.map(o=>'<article><b>訂單 #'+o.id+'，取餐方式 '+safe(o.table_no)+'，NT$'+o.total+'</b><p>'+o.items.map(x=>safe(x.name)+'／'+safe(x.sugar||'未選甜度')+'／'+safe(x.ice||'未選冰量')+' × '+x.quantity).join('、')+'</p><p>備註：'+safe(o.note||'無')+'</p><small>'+safe(o.created_at)+' UTC</small><p><select id="s'+o.id+'"><option value="pending">待確認</option><option value="accepted">已接單</option><option value="completed">已完成</option><option value="cancelled">已取消</option></select> <button onclick="update('+o.id+')">更新</button></p></article>').join('')||'目前無訂單';data.forEach(o=>e('s'+o.id).value=o.status)}async function update(id){let r=await fetch('/api/admin/orders/'+id,{method:'PATCH',headers:{'Content-Type':'application/json','X-Admin-Token':e('token').value},body:JSON.stringify({status:e('s'+id).value})});if(r.ok)load();else e('msg').textContent='更新失敗'}
-</script></html>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>店員訂單｜茶飲管理台</title>
+<style>
+:root{font-family:system-ui,"Noto Sans TC",sans-serif;color:#193329;background:#f3f6f0}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1100px;margin:auto;padding:0 18px 54px}.hero{background:#164937;color:white;padding:28px max(20px,calc((100vw - 1064px)/2));margin-bottom:24px}.hero small{color:#c6ddc9;letter-spacing:.16em;font-weight:700}.hero h1{margin:6px 0 4px;font-size:28px}.hero p{margin:0;color:#d5eadc;font-size:14px}.toolbar{display:flex;align-items:end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:14px 0 24px}.login{display:flex;gap:8px;flex-wrap:wrap}.login input{min-width:230px;padding:11px 12px;border-radius:9px;border:1px solid #b9cabe;font-size:15px}.btn{border:0;background:#225c40;color:white;padding:11px 16px;border-radius:9px;font-weight:700;cursor:pointer}.btn:hover{background:#174b33}.btn:disabled{opacity:.55;cursor:wait}.note{font-size:13px;color:#667a6e;margin:0}.counts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 20px}.count{background:#fff;border:1px solid #e2e9df;border-radius:13px;padding:15px}.count span{display:block;color:#6b7e70;font-size:13px}.count strong{display:block;font-size:26px;margin-top:3px}.tabs{display:flex;gap:7px;overflow:auto;margin:0 0 17px}.tabs button{background:#fff;border:1px solid #cdddcf;border-radius:30px;color:#21543d;white-space:nowrap;padding:9px 14px;cursor:pointer}.tabs button.active{background:#205a40;border-color:#205a40;color:white}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(315px,1fr));gap:15px}.order{background:white;border:1px solid #e0e8de;border-left:5px solid #c69e37;border-radius:14px;padding:19px;box-shadow:0 5px 20px #1b4b2e0b}.order.accepted{border-left-color:#367b5b}.order.completed{border-left-color:#607383}.order.cancelled{border-left-color:#a36b69;opacity:.78}.order-head{display:flex;justify-content:space-between;gap:10px;align-items:start}.order h2{margin:0;font-size:20px}.price{font-size:21px;font-weight:800;color:#245d40}.badge{display:inline-block;padding:5px 10px;border-radius:30px;font-size:12px;font-weight:800;margin-top:9px;background:#fff3d4;color:#775710}.accepted .badge{background:#e2f4e7;color:#22613f}.completed .badge{background:#e8edf2;color:#455d70}.cancelled .badge{background:#f5e8e7;color:#85534f}.items{list-style:none;padding:0;margin:16px 0;border-top:1px solid #e5e9e2}.items li{padding:12px 0;border-bottom:1px solid #e5e9e2}.items strong{display:block}.items small{display:block;color:#617567;margin-top:4px}.meta{font-size:13px;color:#617567}.controls{display:flex;gap:9px;margin-top:16px}.controls select{flex:1;min-width:0;padding:10px;border:1px solid #b8cbb8;border-radius:8px;background:#fff;font-size:14px}.controls .btn{min-width:86px}.empty{text-align:center;padding:48px 15px;color:#65796a;background:#fff;border:1px dashed #cad9ca;border-radius:13px;grid-column:1/-1}#msg{min-height:22px;margin:0 0 12px;color:#235e43;font-size:14px}#msg.error{color:#b33838}@media(max-width:650px){.counts{grid-template-columns:repeat(2,1fr)}.hero{padding:25px 18px}.grid{grid-template-columns:1fr}.wrap{padding:0 13px 40px}}
+</style>
+</head>
+<body>
+<header class="hero"><small>TEA ORDER · STAFF</small><h1>店員訂單管理</h1><p>確認飲品與客製選項，更新備製狀態</p></header>
+<main class="wrap">
+<div class="toolbar"><div class="login"><input id="token" type="password" autocomplete="off" placeholder="輸入管理權杖" aria-label="管理權杖"><button class="btn" id="loadButton">載入訂單</button></div><p class="note">權杖只暫存在目前頁面；重新整理後請重新輸入。</p></div>
+<p id="msg" role="status" aria-live="polite"></p>
+<div class="counts"><div class="count"><span>待確認</span><strong id="pendingCount">0</strong></div><div class="count"><span>已接單</span><strong id="acceptedCount">0</strong></div><div class="count"><span>已完成</span><strong id="completedCount">0</strong></div><div class="count"><span>已取消</span><strong id="cancelledCount">0</strong></div></div>
+<nav class="tabs" aria-label="訂單篩選"><button data-filter="active" class="active">進行中</button><button data-filter="all">全部</button><button data-filter="pending">待確認</button><button data-filter="accepted">已接單</button><button data-filter="completed">已完成</button><button data-filter="cancelled">已取消</button></nav>
+<section id="list" class="grid"><div class="empty">輸入管理權杖後，按「載入訂單」。</div></section>
+</main>
+<script>
+const byId=id=>document.getElementById(id), names={pending:'待確認',accepted:'已接單',completed:'已完成',cancelled:'已取消'};
+let rows=[],filter='active';
+function safe(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function message(text,error=false){byId('msg').textContent=text;byId('msg').classList.toggle('error',error)}
+function date(text){let d=new Date(text.replace(' ','T')+'Z');return Number.isNaN(d.getTime())?safe(text):d.toLocaleString('zh-TW',{timeZone:'Asia/Taipei',hour12:false})}
+function render(){
+ for(let status of Object.keys(names))byId(status+'Count').textContent=rows.filter(o=>o.status===status).length;
+ let visible=rows.filter(o=>filter==='all'||(filter==='active'?['pending','accepted'].includes(o.status):o.status===filter));
+ byId('list').innerHTML=visible.map(o=>'<article class="order '+safe(o.status)+'"><div class="order-head"><div><h2>訂單 #'+o.id+'</h2><span class="badge">'+safe(names[o.status]||o.status)+'</span></div><div class="price">NT$'+o.total+'</div></div><p class="meta">取餐方式：'+safe(o.table_no)+'<br>建立時間：'+date(o.created_at)+'</p><ul class="items">'+o.items.map(x=>'<li><strong>'+safe(x.name)+' × '+x.quantity+'</strong><small>'+safe(x.sugar||'未選甜度')+' · '+safe(x.ice||'未選冰熱')+'</small></li>').join('')+'</ul><p class="meta">備註：'+safe(o.note||'無')+'</p><div class="controls"><select id="s'+o.id+'" aria-label="訂單 '+o.id+' 狀態"><option value="pending">待確認</option><option value="accepted">已接單</option><option value="completed">已完成</option><option value="cancelled">已取消</option></select><button class="btn" data-save="'+o.id+'">儲存狀態</button></div></article>').join('')||'<div class="empty">這個分類目前沒有訂單。</div>';
+ for(let o of visible)byId('s'+o.id).value=o.status;
+}
+async function load(){
+ let token=byId('token').value.trim();if(!token){message('請先輸入管理權杖。',true);return}
+ byId('loadButton').disabled=true;message('正在載入訂單…');
+ try{let r=await fetch('/api/admin/orders',{headers:{'X-Admin-Token':token}});if(!r.ok)throw Error(r.status===401?'管理權杖不正確。':'載入失敗，請稍後重試。');rows=await r.json();render();message('已載入 '+rows.length+' 筆訂單。')}
+ catch(err){message(err.message,true)}
+ finally{byId('loadButton').disabled=false}
+}
+async function update(id,button){
+ let token=byId('token').value.trim(),value=byId('s'+id).value,order=rows.find(o=>o.id===id);
+ if(!order||order.status===value){message('請先選擇不同的狀態。',true);return}
+ button.disabled=true;message('正在更新訂單 #'+id+'…');
+ try{let r=await fetch('/api/admin/orders/'+id,{method:'PATCH',headers:{'X-Admin-Token':token,'Content-Type':'application/json'},body:JSON.stringify({status:value})});if(!r.ok)throw Error('狀態更新失敗，請重新載入訂單。');order.status=value;render();message('訂單 #'+id+' 已更新為「'+names[value]+'」。')}
+ catch(err){message(err.message,true)}
+ finally{button.disabled=false}
+}
+byId('loadButton').onclick=load;byId('token').addEventListener('keydown',e=>{if(e.key==='Enter')load()});
+document.querySelector('.tabs').onclick=e=>{let value=e.target.dataset.filter;if(!value)return;filter=value;document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.filter===value));render()};
+byId('list').onclick=e=>{let id=Number(e.target.dataset.save);if(id)update(id,e.target)};
+</script>
+</body></html>

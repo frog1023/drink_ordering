@@ -1,9 +1,10 @@
 import io
 import json
+import logging
+import secrets
 import os
 import secrets
 import sqlite3
-import logging
 from pathlib import Path
 from urllib.parse import quote
 
@@ -11,7 +12,7 @@ import qrcode
 from dotenv import load_dotenv
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import HTMLResponse, StreamingResponse
-from openai import OpenAI
+from openai import OpenAI, AuthenticationError, PermissionDeniedError, RateLimitError, BadRequestError, NotFoundError, APIConnectionError, APITimeoutError, APIStatusError
 from pydantic import BaseModel, Field
 
 ROOT = Path(__file__).resolve().parent
@@ -20,6 +21,7 @@ MENU = json.loads((ROOT / "menu.json").read_text(encoding="utf-8"))
 ITEMS = {x["id"]: x for x in MENU["items"]}
 DB = ROOT / "orders.sqlite3"
 app = FastAPI(title="主題餐飲 AI Agent")
+logger = logging.getLogger(__name__)
 
 def db():
     conn = sqlite3.connect(DB)
@@ -28,6 +30,10 @@ def db():
 
 with db() as conn:
     conn.execute("CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY, table_no TEXT, items TEXT, total INTEGER, note TEXT, status TEXT DEFAULT 'pending', created_at TEXT DEFAULT CURRENT_TIMESTAMP)")
+    columns = {row["name"] for row in conn.execute("PRAGMA table_info(orders)")}
+    if "status_token" not in columns:
+        conn.execute("ALTER TABLE orders ADD COLUMN status_token TEXT")
+    conn.execute("CREATE UNIQUE INDEX IF NOT EXISTS orders_status_token_idx ON orders(status_token)")
 
 class Chat(BaseModel):
     message: str = Field(min_length=1, max_length=1000)
@@ -65,13 +71,31 @@ def chat(request: Chat):
     if not key:
         raise HTTPException(503, "請先在 .env 設定 OPENAI_API_KEY")
     prior = [{"role": t["role"], "content": t["content"][:1000]} for t in request.history[-8:] if t.get("role") in ("user", "assistant") and isinstance(t.get("content"), str)]
-    instruction = ("你是繁體中文飲料店點餐助手。只依以下菜單推薦，不能虛構菜色、價格、過敏安全或已送單。未知過敏資訊請找店員確認。你無法操作購物車；推薦後請顧客點選畫面上的飲料選項，不要詢問是否由你代為加入。顧客要下單時請他操作購物車。菜單：" + json.dumps(MENU, ensure_ascii=False))
+    instruction = ("你是繁體中文飲料店點餐助手。只依以下菜單推薦，不能虛構菜色、價格、過敏安全或已送單。未知過敏資訊請找店員確認。你無法操作購物車；推薦後請顧客點選畫面上的飲料選項，不要詢問是否由你代為加入。菜單：" + json.dumps(MENU, ensure_ascii=False))
     try:
         result = OpenAI(api_key=key, timeout=20).responses.create(model=os.getenv("OPENAI_MODEL", "gpt-4.1-mini"), instructions=instruction, input=prior + [{"role":"user","content":request.message}], max_output_tokens=350, store=False)
         return {"reply":result.output_text}
+    except AuthenticationError:
+        logger.warning("OpenAI authentication failed")
+        raise HTTPException(502, "AI 金鑰無效；請檢查 Render 的 OPENAI_API_KEY")
+    except PermissionDeniedError:
+        logger.warning("OpenAI permission denied")
+        raise HTTPException(502, "此 API 金鑰沒有使用所選模型的權限")
+    except RateLimitError as exc:
+        logger.warning("OpenAI rate limit or quota reached (code=%s)", getattr(exc, "code", None))
+        raise HTTPException(502, "AI 額度不足或請求過於頻繁；請檢查 API 帳戶用量與計費")
+    except (BadRequestError, NotFoundError) as exc:
+        logger.warning("OpenAI request rejected (status=%s)", exc.status_code)
+        raise HTTPException(502, "AI 模型或請求設定有誤；請檢查 OPENAI_MODEL")
+    except (APIConnectionError, APITimeoutError):
+        logger.warning("OpenAI connection or timeout failure")
+        raise HTTPException(502, "AI 連線逾時；請稍後再試")
+    except APIStatusError as exc:
+        logger.warning("OpenAI API failed (status=%s)", exc.status_code)
+        raise HTTPException(502, "AI 服務暫時無法回應；請稍後再試")
     except Exception:
-        logging.exception("AI chat request failed")
-        raise HTTPException(502, "AI 暫時無法回應，請找店員協助")
+        logger.exception("Unexpected AI chat failure")
+        raise HTTPException(502, "AI 程式發生錯誤；請查看 Render Logs")
 
 @app.post("/api/orders", status_code=201)
 def order(request: Order):
@@ -85,10 +109,22 @@ def order(request: Order):
             raise HTTPException(422, "甜度或冰量不正確")
         selected.append({"id":line.id,"name":ITEMS[line.id]["name"],"quantity":line.quantity,"unit_price":ITEMS[line.id]["price"],"sugar":line.sugar,"ice":line.ice})
     total = sum(x["unit_price"] * x["quantity"] for x in selected)
+    status_token = secrets.token_urlsafe(24)
     with db() as conn:
-        cursor = conn.execute("INSERT INTO orders(table_no,items,total,note) VALUES(?,?,?,?)", (request.table_no.strip(),json.dumps(selected,ensure_ascii=False),total,request.note.strip()))
+        cursor = conn.execute("INSERT INTO orders(table_no,items,total,note,status_token) VALUES(?,?,?,?,?)", (request.table_no.strip(),json.dumps(selected,ensure_ascii=False),total,request.note.strip(),status_token))
         number = cursor.lastrowid
-    return {"id":number,"total":total,"status":"pending"}
+    return {"id":number,"total":total,"status":"pending","status_token":status_token}
+
+@app.get("/api/orders/{number}/status")
+def order_status(number: int, x_order_token: str | None = Header(default=None)):
+    token = x_order_token or ""
+    if len(token) < 20 or len(token) > 100:
+        raise HTTPException(404, "訂單不存在")
+    with db() as conn:
+        row = conn.execute("SELECT status FROM orders WHERE id=? AND status_token=?", (number,token)).fetchone()
+    if not row:
+        raise HTTPException(404, "訂單不存在")
+    return {"id":number,"status":row["status"]}
 
 def guard(token):
     expected = os.getenv("ADMIN_TOKEN", "")
@@ -99,7 +135,7 @@ def guard(token):
 def orders(x_admin_token: str | None = Header(default=None)):
     guard(x_admin_token)
     with db() as conn:
-        rows = conn.execute("SELECT * FROM orders ORDER BY id DESC LIMIT 100").fetchall()
+        rows = conn.execute("SELECT id,table_no,items,total,note,status,created_at FROM orders ORDER BY id DESC LIMIT 100").fetchall()
     return [{**dict(row),"items":json.loads(row["items"])} for row in rows]
 
 @app.patch("/api/admin/orders/{number}")
